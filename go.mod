@@ -1,4 +1,4 @@
-module ilog
+module github.com/ayjayt/ilog
 
 go 1.12
 
