@@ -41,3 +41,13 @@ func SetDefaultLogger(newLogger ilog.LoggerInterface) {
 	defaultLogger.Info("Default Logger Set")
 }
 ```
+
+This might be used to set a logger:
+```
+newLogger := new(ilog.ZapWrap)
+err := newLogger.Init()
+if err != nil {
+	panic(err)
+}
+SetDefaultLogger(newLogger)
+```
