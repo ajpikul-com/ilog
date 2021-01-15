@@ -25,3 +25,19 @@ Use the `ilog_test.go` file as an example of how to set up loggers.
 | BenchmarkLogger/Benchmark_simple_logger					|1000000			|1166 ns/op	 |0 B/op	 |0 allocs/op	|
 | BenchmarkLogger/Benchmark_zap_production_logger	|5000000			|308 ns/op	 |2 B/op	 |0 allocs/op	|
 | BenchmarkLogger/Benchmark_zap_sugared_logger		|2000000			|611 ns/op	 |50 B/op	 |2 allocs/op	|
+
+## Put this in your libraries:
+
+```
+var defaultLogger ilog.LoggerInterface
+
+func init() {
+	if defaulLogger == nil {
+		defaultLogger = new(ilog.EmptyLogger)
+	}
+}
+func SetDefaultLogger(newLogger ilog.LoggerInterface) {
+	defaultLogger = newLogger
+	defaultLogger.Info("Default Logger Set")
+}
+```
