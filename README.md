@@ -5,16 +5,45 @@
 * Info(string)
 * Error(string)
 
-This repository implements three backends for this interface:
+You must choose (or write) a backend:
 
 * EmptyLogger- Logging is off in this case
 * SimpleLogger- Unbuffered writes to stderr or another file descriptor
 * ZapWrap- A backend of uber-go/zap
-* TestLogger- A backend that calls t.Log or b.Log (needs to be initialized for every test)
+* TestLogger- A backend that calls t.Log or b.Log (has seperate constructor which accepts as an argument the test being run)
 
-You can have a global default LoggerInterface or a LoggerInterface specific to some object, and set the backend to EmptyLogger for sub-nanosecond cancellation of logging, or whatever you want.
+Use the `ilog_test.go` file as an example of how to set up loggers. Or TODO: write readme for each one
 
-Use the `ilog_test.go` file as an example of how to set up loggers.
+## Use
+
+### In Application Example
+```
+newLogger := new(ilog.ZapWrap)
+err := newLogger.Init()
+if err != nil {
+	panic(err)
+}
+myModule.SetDefaultLogger(newLogger)
+```
+
+### In-Module Example
+```
+// Set a global logger for the library
+var defaultLogger ilog.LoggerInterface
+
+// Establish a default logger
+func init() {
+	if defaulLogger == nil {
+		defaultLogger = new(ilog.EmptyLogger)
+	}
+}
+
+// Allow calling program to change default logger
+func SetDefaultLogger(newLogger ilog.LoggerInterface) {
+	defaultLogger = newLogger
+	defaultLogger.Info("Default Logger Set")
+}
+```
 
 ## Benchmarks
 
@@ -26,35 +55,3 @@ Use the `ilog_test.go` file as an example of how to set up loggers.
 | BenchmarkLogger/Benchmark_zap_production_logger	|5000000			|308 ns/op	 |2 B/op	 |0 allocs/op	|
 | BenchmarkLogger/Benchmark_zap_sugared_logger		|2000000			|611 ns/op	 |50 B/op	 |2 allocs/op	|
 
-## Use
-
-### Example for in library/dependency/module:
-
-```
-// This is to set a global logger for the library
-var defaultLogger ilog.LoggerInterface
-
-// If the logger is not set, set it
-func init() {
-	if defaulLogger == nil {
-		defaultLogger = new(ilog.EmptyLogger)
-	}
-}
-
-// Expose a function that allows programs importing this library to set logger for this library
-func SetDefaultLogger(newLogger ilog.LoggerInterface) {
-	defaultLogger = newLogger
-	defaultLogger.Info("Default Logger Set")
-}
-```
-
-### Application Example
-This might be used to set a logger:
-```
-newLogger := new(ilog.ZapWrap)
-err := newLogger.Init()
-if err != nil {
-	panic(err)
-}
-SetDefaultLogger(newLogger)
-```
