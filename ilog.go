@@ -165,7 +165,7 @@ func (z *ZapWrap) Init() error {
 	if len(z.Paths) > 0 {
 		config.OutputPaths = z.Paths
 	}
-	z.ZapLogger, _ = config.Build(zap.AddCallerSkip(2), zap.AddStackTrace()) // Can add more callers here with zap.AddCaller
+	z.ZapLogger, _ = config.Build(zap.AddCallerSkip(2)) // Can add more callers here with zap.AddCaller
 	if z.Sugar {
 		z.SugarLogger = z.ZapLogger.Sugar()
 		z.infoFunc = func(output string) {
