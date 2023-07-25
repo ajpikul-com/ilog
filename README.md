@@ -5,6 +5,8 @@ In simple logger, it's a Level(DEBUG|INFO|WARN|ERROR|NONE) function, in zap, it'
 I realized in zap we can't use most of the sugar logger interface with this structure, and I'm leaning towards just using
 zap entirely. Also, tests don't implement any of this yet.
 
+I generally like it, but I want better stack trace processing. Also, need to set levels in consistent way.
+
 `ilog` provides an interface (LoggerInterface) that specifies three functions:
 * Init() error
 * Info(string)
