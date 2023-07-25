@@ -188,10 +188,10 @@ func (z *ZapWrap) Init() error {
 			z.ZapLogger.Error(output)
 		}
 		z.debugFunc = func(output string) {
-			z.Debug(output)
+			z.ZapLogger.Debug(output)
 		}
 		z.warnFunc = func(output string) {
-			z.Warn(output)
+			z.ZapLogger.Warn(output)
 		}
 	}
 	return nil
