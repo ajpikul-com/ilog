@@ -150,20 +150,20 @@ type ZapWrap struct {
 // Init starts a production level zap logger, which we use since we don't use all the same logging levels as Zap. It will switch the info or error func depending on whether or not its a sugared logger
 func (z *ZapWrap) Init() error {
 	config := zap.NewProductionConfig()
+	switch z.Level {
+	case DEBUG:
+		config.Level.SetLevel(zap.DebugLevel)
+	case INFO:
+		config.Level.SetLevel(zap.InfoLevel)
+	case WARN:
+		config.Level.SetLevel(zap.WarnLevel)
+	case ERROR:
+		config.Level.SetLevel(zap.ErrorLevel)
+	case NONE:
+		config.Level.SetLevel(zap.DPanicLevel)
+	}
 	if len(z.Paths) > 0 {
 		config.OutputPaths = z.Paths
-		switch z.Level {
-		case DEBUG:
-			config.Level.SetLevel(zap.DebugLevel)
-		case INFO:
-			config.Level.SetLevel(zap.InfoLevel)
-		case WARN:
-			config.Level.SetLevel(zap.WarnLevel)
-		case ERROR:
-			config.Level.SetLevel(zap.ErrorLevel)
-		case NONE:
-			config.Level.SetLevel(zap.DPanicLevel)
-		}
 	}
 	z.ZapLogger, _ = config.Build(zap.AddCallerSkip(2)) // Can add more callers here with zap.AddCaller
 	if z.Sugar {
