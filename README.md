@@ -11,6 +11,8 @@ I generally like it, but I want better stack trace processing. Also, need to set
 * Init() error
 * Info(string)
 * Error(string)
+* Debug(string)
+* Warn(string)
 
 You must choose (or write) a backend:
 
@@ -21,8 +23,9 @@ defaultLogger.Init()
 ```
 * SimpleLogger- Unbuffered writes to stderr or another file descriptor
 ```
-defaultLogger = &ilog.SimpleLogger{}
+defaultLogger = &ilog.SimpleLogger{} 
 defaultLogger.Init()
+defaultLogger.Level(ilog.DEBUG|INFO|WARN|ERROR)
 ```
 * ZapWrap- A backend of uber-go/zap
 ```
@@ -30,6 +33,7 @@ defaultLogger = &ilog.ZapWrap{}
 type ilog.ZapWrap struct { 
  Sugar bool // If true support printf and key-value pairs
  Paths []string // Out, default is stderr
+ Level int // One of ilog.DEBUG|INFO|WARN|ERROR
  ZapLogger *zap.Logger // Access after init
  SugarLogger *zap.SugaredLogger // Access after init
 }
